@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Powered Decision Review System - Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <div class="particles" id="particles"></div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <div class="nav-brand">
+                <div class="logo">🏏</div>
+                <div>
+                    <div class="nav-title">DRS PRO</div>
+                    <div class="nav-subtitle">Decision Review System</div>
+                </div>
+            </div>
+            <div class="nav-links">
+                <a href="#" class="nav-link active" data-screen="home">🏠 Dashboard</a>
+                <a href="#" class="nav-link" data-screen="upload">📁 Upload</a>
+                <a href="#" class="nav-link" data-screen="camera">📹 Live</a>
+                <a href="#" class="nav-link" data-screen="review">🔍 Analysis</a>
+                <a href="#" class="nav-link" data-screen="history">📊 History</a>
+            </div>
+            <div class="live-indicator">
+                <span class="live-dot"></span>
+                SYSTEM ACTIVE
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Home Screen -->
+        <div id="home" class="screen active">
+            <div class="card">
+                <h1 class="card-title">
+                    <span class="card-title-icon">⚡</span>
+                    AI-Powered Cricket Decision System
+                </h1>
+                <p style="font-size: 1.2rem; color: rgba(255,255,255,0.7); line-height: 1.8;">
+                    Advanced artificial intelligence system for accurate cricket umpiring decisions. 
+                    Featuring real-time ball tracking, LBW analysis, edge detection, and comprehensive no-ball verification.
+                </p>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalDecisions">1,247</div>
+                        <div class="stat-label">Total Decisions</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">98.5%</div>
+                        <div class="stat-label">Accuracy Rate</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">2.3s</div>
+                        <div class="stat-label">Avg. Analysis Time</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">24/7</div>
+                        <div class="stat-label">System Uptime</div>
+                    </div>
+                </div>
+
+                <div class="feature-grid">
+                    <div class="feature-card" onclick="showScreen('upload')">
+                        <div class="feature-icon">📁</div>
+                        <div class="feature-title">Upload Video</div>
+                        <div class="feature-desc">Upload match footage for detailed frame-by-frame analysis</div>
+                    </div>
+
+                    <div class="feature-card" onclick="showScreen('camera')">
+                        <div class="feature-icon">📹</div>
+                        <div class="feature-title">Live Camera</div>
+                        <div class="feature-desc">Real-time decision analysis with multi-camera support</div>
+                    </div>
+
+                    <div class="feature-card" onclick="showScreen('review')">
+                        <div class="feature-icon">🎯</div>
+                        <div class="feature-title">LBW Analysis</div>
+                        <div class="feature-desc">Advanced ball trajectory and impact point prediction</div>
+                    </div>
+
+                    <div class="feature-card" onclick="showNoBallModal()">
+                        <div class="feature-icon">⚠️</div>
+                        <div class="feature-title">No-Ball Detection</div>
+                        <div class="feature-desc">Front foot, height, and bowling action analysis</div>
+                    </div>
+
+                    <div class="feature-card" onclick="showScreen('history')">
+                        <div class="feature-icon">📊</div>
+                        <div class="feature-title">Decision History</div>
+                        <div class="feature-desc">Review past decisions with full replay capability</div>
+                    </div>
+
+                    <div class="feature-card" onclick="showSettingsModal()">
+                        <div class="feature-icon">⚙️</div>
+                        <div class="feature-title">System Settings</div>
+                        <div class="feature-desc">Configure cameras, sensitivity, and preferences</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Stats Card -->
+            <div class="card">
+                <h2 class="card-title">
+                    <span class="card-title-icon">📈</span>
+                    Today's Statistics
+                </h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" style="color: var(--danger);">23</div>
+                        <div class="stat-label">OUT Decisions</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" style="color: var(--success);">31</div>
+                        <div class="stat-label">NOT OUT</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" style="color: var(--warning);">8</div>
+                        <div class="stat-label">No Balls</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" style="color: var(--primary);">5</div>
+                        <div class="stat-label">Wide Balls</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upload Screen -->
+        <div id="upload" class="screen">
+            <div class="card">
+                <h1 class="card-title">
+                    <span class="card-title-icon">📁</span>
+                    Upload Match Video
+                </h1>
+
+                <div class="upload-zone" id="uploadZone" onclick="document.getElementById('videoFile').click()">
+                    <div class="upload-icon">☁️</div>
+                    <h2 style="margin-bottom: 0.5rem;">Drag & Drop Video File</h2>
+                    <p style="color: rgba(255,255,255,0.6);">or click to browse</p>
+                    <p style="color: rgba(255,255,255,0.4); margin-top: 1rem; font-size: 0.9rem;">
+                        Supported: MP4, AVI, MOV (Max 1GB)
+                    </p>
+                    <input type="file" id="videoFile" accept="video/*" onchange="handleVideoUpload(event)" style="display: none;">
+                </div>
+
+                <div id="uploadProgress" style="display: none;">
+                    <div class="progress-container">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <span>Uploading video...</span>
+                            <span id="uploadPercent">0%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="uploadProgressBar" style="width: 0%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="videoPreviewSection" style="display: none;">
+                    <div class="video-container">
+                        <video id="uploadedVideo" controls></video>
+                        <canvas id="videoOverlay" class="video-overlay"></canvas>
+                    </div>
+
+                    <div class="video-controls">
+                        <button class="btn btn-primary" onclick="playVideo()">▶ Play</button>
+                        <button class="btn btn-secondary" onclick="pauseVideo()">⏸ Pause</button>
+                        <button class="btn btn-secondary" onclick="setSpeed(0.25)">0.25x</button>
+                        <button class="btn btn-secondary" onclick="setSpeed(0.5)">0.5x</button>
+                        <button class="btn btn-secondary" onclick="setSpeed(1)">1x</button>
+                        <button class="btn btn-secondary" onclick="prevFrame()">⏮ Prev</button>
+                        <button class="btn btn-secondary" onclick="nextFrame()">⏭ Next</button>
+                    </div>
+
+                    <div class="decision-types">
+                        <div class="decision-type-card selected" data-type="lbw" onclick="selectDecisionType(this)">
+                            <div class="decision-type-icon">🎯</div>
+                            <div class="decision-type-name">LBW</div>
+                        </div>
+                        <div class="decision-type-card" data-type="caught" onclick="selectDecisionType(this)">
+                            <div class="decision-type-icon">🧤</div>
+                            <div class="decision-type-name">Caught Behind</div>
+                        </div>
+                        <div class="decision-type-card" data-type="noball" onclick="selectDecisionType(this)">
+                            <div class="decision-type-icon">⚠️</div>
+                            <div class="decision-type-name">No Ball</div>
+                        </div>
+                        <div class="decision-type-card" data-type="runout" onclick="selectDecisionType(this)">
+                            <div class="decision-type-icon">🏃</div>
+                            <div class="decision-type-name">Run Out</div>
+                        </div>
+                        <div class="decision-type-card" data-type="stumping" onclick="selectDecisionType(this)">
+                            <div class="decision-type-icon">🏏</div>
+                            <div class="decision-type-name">Stumping</div>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 2rem;">
+                        <button class="btn btn-success btn-lg" onclick="startAnalysis()">
+                            🔍 Start AI Analysis
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Camera Screen -->
+        <div id="camera" class="screen">
+            <div class="card">
+                <h1 class="card-title">
+                    <span class="card-title-icon">📹</span>
+                    Live Camera Feed
+                </h1>
+
+                <div class="analysis-grid">
+                    <div>
+                        <div class="video-container">
+                            <video id="cameraFeed" autoplay playsinline></video>
+                        </div>
+                        <div class="video-controls">
+                            <button class="btn btn-success" onclick="startCamera()">📹 Start Camera</button>
+                            <button class="btn btn-danger" onclick="stopCamera()">⏹ Stop</button>
+                            <button class="btn btn-primary" onclick="captureFrame()">📸 Capture Frame</button>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="visualization-panel">
+                            <h3 style="margin-bottom: 1rem;">Real-time Tracking</h3>
+                            <div class="viz-canvas-container">
+                                <canvas id="liveTrackingCanvas"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 2rem;">
+                    <button class="btn btn-success btn-lg" onclick="analyzeCurrentFrame()">
+                        ⚡ Analyze Current Frame
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Review/Analysis Screen -->
+        <div id="review" class="screen">
+            <div class="card">
+                <h1 class="card-title">
+                    <span class="card-title-icon">🔍</span>
+                    Decision Review Analysis
+                    <span class="badge badge-out" id="analysisStatus" style="margin-left: auto;">Analyzing...</span>
+                </h1>
+
+                <!-- Progress Steps -->
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="analysisProgress" style="width: 0%;"></div>
+                    </div>
+                    <div class="progress-steps">
+                        <div class="progress-step">
+                            <div class="step-circle active" id="step1">1</div>
+                            <span>Detection</span>
+                        </div>
+                        <div class="progress-step">
+                            <div class="step-circle" id="step2">2</div>
+                            <span>Tracking</span>
+                        </div>
+                        <div class="progress-step">
+                            <div class="step-circle" id="step3">3</div>
+                            <span>Prediction</span>
+                        </div>
+                        <div class="progress-step">
+                            <div class="step-circle" id="step4">4</div>
+                            <span>Decision</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="analysis-grid">
+                    <div>
+                        <h3 style="margin-bottom: 1rem;">Video Playback</h3>
+                        <div class="video-container">
+                            <video id="reviewVideo" controls></video>
+                        </div>
+                        <div class="video-controls">
+                            <button class="btn btn-primary" onclick="document.getElementById('reviewVideo').play()">▶</button>
+                            <button class="btn btn-secondary" onclick="document.getElementById('reviewVideo').pause()">⏸</button>
+                            <button class="btn btn-secondary" onclick="setReviewSpeed(0.25)">0.25x</button>
+                            <button class="btn btn-secondary" onclick="setReviewSpeed(0.5)">0.5x</button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 style="margin-bottom: 1rem;">Ball Trajectory & Impact</h3>
+                        <div class="visualization-panel">
+                            <div class="viz-canvas-container">
+                                <canvas id="vizCanvas"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- No Ball Analysis Panel -->
+                <div class="no-ball-panel">
+                    <h3 class="no-ball-title">⚠️ No Ball Detection Analysis</h3>
+                    <div class="no-ball-checks">
+                        <div class="check-item">
+                            <div class="check-status valid" id="frontFootCheck">✓</div>
+                            <div>
+                                <div style="font-weight: 600;">Front Foot</div>
+                                <div style="font-size: 0.85rem; color: rgba(255,255,255,0.6);">Behind crease line</div>
+                            </div>
+                        </div>
+                        <div class="check-item">
+                            <div class="check-status valid" id="heightCheck">✓</div>
+                            <div>
+                                <div style="font-weight: 600;">Ball Height</div>
+                                <div style="font-size: 0.85rem; color: rgba(255,255,255,0.6);">Below waist level</div>
+                            </div>
+                        </div>
+                        <div class="check-item">
+                            <div class="check-status valid" id="armCheck">✓</div>
+                            <div>
+                                <div style="font-weight: 600;">Bowling Arm</div>
+                                <div style="font-size: 0.85rem; color: rgba(255,255,255,0.6);">Legal action</div>
+                            </div>
+                        </div>
+                        <div class="check-item">
+                            <div class="check-status valid" id="wideCheck">✓</div>
+                            <div>
+                                <div style="font-weight: 600;">Wide Ball</div>
+                                <div style="font-size: 0.85rem; color: rgba(255,255,255,0.6);">Within reach</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analysis Results -->
+                <div class="result-grid" style="margin-top: 2rem;">
+                    <div class="result-item">
+                        <div class="result-label">Pitched</div>
+                        <div class="result-value positive" id="pitchResult">In Line</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">Impact</div>
+                        <div class="result-value positive" id="impactResult">In Line</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">Hitting Stumps</div>
+                        <div class="result-value positive" id="stumpResult">Yes</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">Edge Detected</div>
+                        <div class="result-value negative" id="edgeResult">No</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">Ball Speed</div>
+                        <div class="result-value" id="speedResult">142 km/h</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">AI Confidence</div>
+                        <div class="result-value positive" id="confidenceResult">96%</div>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 2rem;">
+                    <button class="btn btn-success btn-lg" onclick="generateDecision()">
+                        ⚡ Generate Final Decision
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Decision Screen -->
+        <div id="decision" class="screen">
+            <div class="card">
+                <h1 class="card-title">
+                    <span class="card-title-icon">⚖️</span>
+                    Final Decision
+                </h1>
+
+                <div class="final-decision out" id="finalDecisionBox">
+                    <div class="decision-main-text" id="decisionText">OUT</div>
+                    <div class="decision-sub-text" id="decisionSubText">LBW - Leg Before Wicket</div>
+                    
+                    <div class="confidence-meter">
+                        <p style="margin-bottom: 0.5rem;">AI Confidence Level</p>
+                        <div class="confidence-bar">
+                            <div class="confidence-fill" id="confidenceFill" style="width: 0%;">
+                                <span id="confidenceText">96%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 2rem; text-align: left; max-width: 400px; margin-left: auto; margin-right: auto;" id="decisionDetails">
+                        <p>✓ Ball pitched in line with stumps</p>
+                        <p>✓ Impact point in-line</p>
+                        <p>✓ Ball trajectory hitting middle stump</p>
+                        <p>✗ No edge detected on Ultra Edge</p>
+                        <p>✓ Legal delivery confirmed</p>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" style="font-size: 1.5rem;">2.8s</div>
+                        <div class="stat-label">Analysis Time</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" style="font-size: 1rem;" id="decisionDate">22 Jan 2026</div>
+                        <div class="stat-label">Date & Time</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" style="font-size: 1rem;">AI System v3.0</div>
+                        <div class="stat-label">Reviewed By</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" style="font-size: 1rem;" id="ballType">Legal</div>
+                        <div class="stat-label">Ball Type</div>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 2rem;">
+                    <button class="btn btn-primary" onclick="saveDecision()">💾 Save Decision</button>
+                    <button class="btn btn-success" onclick="downloadReplay()">⬇ Download Replay</button>
+                    <button class="btn btn-secondary" onclick="shareDecision()">📤 Share</button>
+                    <button class="btn btn-secondary" onclick="showScreen('home')">🏠 Back to Home</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- History Screen -->
+        <div id="history" class="screen">
+            <div class="card">
+                <h1 class="card-title">
+                    <span class="card-title-icon">📊</span>
+                    Decision History
+                </h1>
+
+                <!-- Filters -->
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem;">
+                    <select class="form-select" style="max-width: 200px;">
+                        <option>All Decisions</option>
+                        <option>OUT</option>
+                        <option>NOT OUT</option>
+                        <option>No Ball</option>
+                    </select>
+                    <select class="form-select" style="max-width: 200px;">
+                        <option>All Types</option>
+                        <option>LBW</option>
+                        <option>Caught Behind</option>
+                        <option>Run Out</option>
+                    </select>
+                    <input type="date" class="form-input" style="max-width: 200px;">
+                    <button class="btn btn-primary">🔍 Filter</button>
+                </div>
+
+                <div class="history-container">
+                    <table class="history-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Date & Time</th>
+                                <th>Type</th>
+                                <th>Outcome</th>
+                                <th>Ball Status</th>
+                                <th>Confidence</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyBody">
+                            <tr>
+                                <td>#DRS-1247</td>
+                                <td>22 Jan 2026, 14:30:15</td>
+                                <td>LBW</td>
+                                <td><span class="badge badge-out">OUT</span></td>
+                                <td><span class="badge badge-not-out">Legal</span></td>
+                                <td>96%</td>
+                                <td><button class="btn btn-primary" style="padding: 0.5rem 1rem;">View</button></td>
+                            </tr>
+                            <tr>
+                                <td>#DRS-1246</td>
+                                <td>22 Jan 2026, 13:45:22</td>
+                                <td>Caught Behind</td>
+                                <td><span class="badge badge-not-out">NOT OUT</span></td>
+                                <td><span class="badge badge-not-out">Legal</span></td>
+                                <td>89%</td>
+                                <td><button class="btn btn-primary" style="padding: 0.5rem 1rem;">View</button></td>
+                            </tr>
+                            <tr>
+                                <td>#DRS-1245</td>
+                                <td>22 Jan 2026, 12:30:08</td>
+                                <td>LBW</td>
+                                <td><span class="badge badge-not-out">NOT OUT</span></td>
+                                <td><span class="badge badge-no-ball">No Ball</span></td>
+                                <td>94%</td>
+                                <td><button class="btn btn-primary" style="padding: 0.5rem 1rem;">View</button></td>
+                            </tr>
+                            <tr>
+                                <td>#DRS-1244</td>
+                                <td>22 Jan 2026, 11:15:33</td>
+                                <td>Run Out</td>
+                                <td><span class="badge badge-out">OUT</span></td>
+                                <td><span class="badge badge-not-out">Legal</span></td>
+                                <td>99%</td>
+                                <td><button class="btn btn-primary" style="padding: 0.5rem 1rem;">View</button></td>
+                            </tr>
+                            <tr>
+                                <td>#DRS-1243</td>
+                                <td>21 Jan 2026, 16:45:19</td>
+                                <td>LBW</td>
+                                <td><span class="badge badge-out">OUT</span></td>
+                                <td><span class="badge badge-not-out">Legal</span></td>
+                                <td>92%</td>
+                                <td><button class="btn btn-primary" style="padding: 0.5rem 1rem;">View</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div style="display: flex; justify-content: center; gap: 0.5rem; margin-top: 2rem;">
+                    <button class="btn btn-secondary">« Prev</button>
+                    <button class="btn btn-primary">1</button>
+                    <button class="btn btn-secondary">2</button>
+                    <button class="btn btn-secondary">3</button>
+                    <button class="btn btn-secondary">Next »</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Overlay -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal" id="modal">
+            <h2 class="modal-title" id="modalTitle">No Ball Detection Setup</h2>
+            <div id="modalContent">
+                <div class="form-group">
+                    <label class="form-label">Detection Sensitivity</label>
+                    <select class="form-select">
+                        <option>High (Recommended)</option>
+                        <option>Medium</option>
+                        <option>Low</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Camera Angle</label>
+                    <select class="form-select">
+                        <option>Side-on View</option>
+                        <option>Behind Stumps</option>
+                        <option>Multi-Angle</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Crease Line Calibration</label>
+                    <input type="range" style="width: 100%;">
+                </div>
+            </div>
+            <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                <button class="btn btn-success" onclick="closeModal()">Apply Settings</button>
+                <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
